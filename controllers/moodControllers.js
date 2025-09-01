@@ -32,18 +32,23 @@ exports.getMoods = async (req, res, next) => {
 
     const averageMood = avgResult.length > 0 ? avgResult[0].avgMood.toFixed(1) : "0";
 
+    // Calculate total pages
+    const totalPages = Math.ceil(total / limit);
+
     res.status(200).json({
       success: true,
       total,
+      totalPages,   // <-- added here
       page,
       limit,
-      averageMood,   // <-- now added
+      averageMood,
       data: moods
     });
   } catch (err) {
     next(err);
   }
 };
+
 
 exports.getMoodsRangeGraph = async (req, res, next) => {
   try {
