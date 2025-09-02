@@ -50,11 +50,17 @@ const signup = async (req, res, next) => {
     next(err); // handled by error middleware
   }
 };
+
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { identifier, password } = req.body; 
+    // identifier = email or phone number
 
-    const user = await User.findOne({ email });
+    // Find user by email or phone
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { phone: identifier }]
+    });
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -77,5 +83,6 @@ const login = async (req, res, next) => {
     next(err);
   }
 };
+
 
 module.exports = { signup, login };
