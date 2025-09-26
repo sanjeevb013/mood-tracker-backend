@@ -5,6 +5,7 @@ const cors = require('cors');
 const moodRoutes = require('./routes/moodRouters');
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const articleRoutes = require('./routes/articleRoutes');
 
 // Middleware
 const errorHandler = require('./middlewares/errorHandler');
@@ -20,12 +21,13 @@ app.use(express.json()); // parse JSON request bodies
 app.use('/api/moods',authMiddleware, moodRoutes);   // moods-related routes
 app.use('/api/auth', authRoutes);   // authentication routes
 app.use('/api/profile',profileRoutes);   // profile routes
+app.use('/api/articles', articleRoutes)
 
-app.use((req, res, next) => {
-  console.log("Incoming request:", req.method);
-  console.log("Body:", req);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log("Incoming request:", req.method);
+//   console.log("Body:", req);
+//   next();
+// });
 
 // Error handler (must be last)
 app.use(errorHandler);
