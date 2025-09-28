@@ -1,6 +1,16 @@
-// const Blog= require('../models/Article');
+const Article = require('../models/Article');
 
-export const addBlog=(req, res,next)=>{
-    console.log(req.body,"sss")
-    next()
+ const addBlog = async(req, res,next)=>{
+    try{
+         console.log(req.body,"sss")
+    const addArticle = new Article(req.body);
+    const add=await addArticle.save();
+    res.status(201).json(addArticle);
+    console.log(addArticle,"article")
+    }
+    catch(err){
+       next(err) 
+    }
 }
+
+module.exports={addBlog}

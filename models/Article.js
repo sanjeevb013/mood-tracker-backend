@@ -19,12 +19,6 @@ const articleSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true,
-    validate: {
-      validator: function (url) {
-        return /^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/.test(url);
-      },
-      message: 'Invalid image URL format',
-    },
   },
   datePublished: {
     type: Date,
