@@ -24,12 +24,6 @@ const articleSchema = new mongoose.Schema({
     type: Date,
     required: true,
     default: Date.now,
-  },
-  slug: {
-    type: String,
-    unique: true,
-    lowercase: true,
-    trim: true,
   }
 }, {
   timestamps: true,

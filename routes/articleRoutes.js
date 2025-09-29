@@ -1,7 +1,9 @@
 const express= require("express");
 const router=express.Router()
-const {addBlog}=require('../controllers/articleController');
+const {articleDetail, getBlog, getArticleDetail}=require('../controllers/articleController');
 
-router.post('/add-article',addBlog);
+router.get('/get-article', getBlog);
+router.post('/add-article', articleDetail);
+router.get('/main-article/:id', getArticleDetail);
 
 module.exports= router;
