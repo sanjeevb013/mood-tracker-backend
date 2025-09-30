@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const ContentBlockSchema = new mongoose.Schema({
   header: { type: String, required: true },
   paragraphs: [{ type: String }],
-  bulletPoints: [{ type: String }]
+   bulletPoints: [{ type: String }]
 });
+
 
 const ArticleDetailSchema = new mongoose.Schema({
      articleId: {
