@@ -1,5 +1,6 @@
 const Article = require('../models/Article');
 const ArticleDetail = require('../models/ArticleData');
+const path = require("path");
 
 const getBlog = async (req, res, next) => {
   try {
@@ -25,50 +26,62 @@ const getBlog = async (req, res, next) => {
   }
 };
 
-
-const articleDetail = async (req, res, next) => {
+const addArticleDetail = async (req, res) => {
   try {
-    const { title, description, author, date, content, image } = req.body;
+    const { title, description, author, date, content } = req.body;
 
-    // Step 1: Save lightweight Article
+    // ✅ Step 1: Handle uploaded image (multer gives req.file)
+    const imageUrl = req.file
+      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+      : null;
+
+    if (!imageUrl) {
+      return res.status(400).json({
+        success: false,
+        message: "Image is required",
+      });
+    }
+
+    // ✅ Step 2: Save lightweight Article
     const newArticle = new Article({
       title,
       description,
       author,
-      datePublished: date,
-      image
+      datePublished: date || Date.now(),
+      image: imageUrl,
     });
 
     const savedArticle = await newArticle.save();
 
-    // Step 2: Save full ArticleDetail linked to Article
+    // ✅ Step 3: Save full ArticleDetail linked to Article
     const newArticleDetail = new ArticleDetail({
       articleId: savedArticle._id,
       title,
       description,
       author,
-      date,
-      content,
-      image
+      date: date || Date.now(),
+      content, // must be array of content blocks { header, paragraphs, bulletPoints }
+      image: imageUrl,
     });
 
     const savedDetail = await newArticleDetail.save();
 
     res.status(201).json({
       success: true,
-      message: 'Article and detail saved successfully',
+      message: "Article and detail saved successfully",
       article: savedArticle,
-      detail: savedDetail
+      detail: savedDetail,
     });
   } catch (error) {
-    
     res.status(500).json({
       success: false,
-      message: 'Failed to save article and detail',
-      error: error.message
+      message: "Failed to save article and detail",
+      error: error.message,
     });
   }
 };
+
+module.exports = { addArticleDetail };
 
 const getArticleDetail = async (req, res, next) => {
   try {
@@ -101,4 +114,4 @@ const getArticleDetail = async (req, res, next) => {
 
 
 
-module.exports={getBlog, articleDetail, getArticleDetail}
+module.exports={getBlog, addArticleDetail, getArticleDetail}

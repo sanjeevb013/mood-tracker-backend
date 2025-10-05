@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path')
 
 // Routes
 const moodRoutes = require('./routes/moodRouters');
@@ -15,13 +16,13 @@ const app = express();
 app.use(cors()); // enable CORS for frontend requests
 app.use(express.json()); // parse JSON request bodies
 
-
+app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 
 // Routes
 app.use('/api/moods',authMiddleware, moodRoutes);   // moods-related routes
 app.use('/api/auth', authRoutes);   // authentication routes
 app.use('/api/profile',profileRoutes);   // profile routes
-app.use('/api/articles', articleRoutes)
+app.use('/api/articles', articleRoutes); 
 
 // app.use((req, res, next) => {
 //   console.log("Incoming request:", req.method);
